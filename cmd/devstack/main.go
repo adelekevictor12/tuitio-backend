@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -67,9 +68,10 @@ func main() {
 	ix := indexer.New(rpc.New(rpcURL), st, []string{registry, escrow}, 10*time.Second, startLedger)
 	go ix.Run(ctx)
 
+	origins := strings.Split(getenv("ALLOWED_ORIGINS", ""), ",")
 	srv := &http.Server{
 		Addr:              ":" + apiPort,
-		Handler:           api.New(st).Routes(),
+		Handler:           api.New(st).RoutesWithCORS(origins),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 	go func() {
