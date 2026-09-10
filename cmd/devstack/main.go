@@ -69,8 +69,9 @@ func main() {
 	go ix.Run(ctx)
 
 	origins := strings.Split(getenv("ALLOWED_ORIGINS", ""), ",")
+	host := getenv("HOST", "0.0.0.0")
 	srv := &http.Server{
-		Addr:              ":" + apiPort,
+		Addr:              net.JoinHostPort(host, apiPort),
 		Handler:           api.New(st).RoutesWithCORS(origins),
 		ReadHeaderTimeout: 5 * time.Second,
 	}

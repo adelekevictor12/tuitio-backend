@@ -16,6 +16,7 @@ type Config struct {
 	StartLedger      uint32
 	PollSeconds      int
 	Port             string
+	Host             string
 	AllowedOrigins   []string
 }
 
@@ -27,6 +28,7 @@ func Load() (Config, error) {
 		RegistryContract: os.Getenv("REGISTRY_CONTRACT"),
 		EscrowContract:   os.Getenv("ESCROW_CONTRACT"),
 		Port:             getenv("PORT", "8080"),
+		Host:             getenv("HOST", "0.0.0.0"),
 	}
 	if c.DatabaseURL == "" {
 		return c, fmt.Errorf("DATABASE_URL is required")
